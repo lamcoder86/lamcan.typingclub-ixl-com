@@ -9,6 +9,10 @@ const profileMenu = document.querySelector(".profile-menu");
 const profileButton = document.querySelector(".profile-button");
 
 const games = {
+  "google-slides": {
+    title: "Google Slides",
+    url: "https://docs.google.com/presentation/create",
+  },
   "snow-rider": {
     title: "Snow Rider",
     url: "https://snow-rider.net/",

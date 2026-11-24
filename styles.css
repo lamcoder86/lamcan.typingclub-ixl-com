@@ -72,17 +72,27 @@ body::after {
   text-decoration: none;
 }
 
-.blooket-mark {
-  display: inline-block;
-  color: #ffffff;
-  font-family: "Arial Black", Impact, sans-serif;
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: -0.06em;
+.slides-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #3c4043;
+  font-size: 22px;
+  font-weight: 500;
   line-height: 42px;
-  text-shadow:
-    0 3px 0 #34235d,
-    2px 5px 0 rgba(77, 46, 130, 0.28);
+  letter-spacing: 0;
+}
+
+.slides-icon {
+  width: 25px;
+  height: 31px;
+  border: 2px solid #f9ab00;
+  border-radius: 3px;
+  background:
+    linear-gradient(#ffffff, #ffffff) 5px 7px / 15px 2px no-repeat,
+    linear-gradient(#f9ab00, #f9ab00) 5px 12px / 15px 11px no-repeat,
+    #ffffff;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.2);
 }
 
 .open-link,
@@ -350,8 +360,8 @@ h1 {
     font-size: 17px;
   }
 
-  .blooket-mark {
-    font-size: 29px;
+  .slides-mark {
+    font-size: 18px;
     line-height: 38px;
   }
 

@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#4d2e82" />
-    <title>Blooket Dashboard</title>
+    <title>Google Slides</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app-shell">
       <header class="topbar">
-        <a class="brand" href="./" aria-label="Blooket dashboard">
-          <span class="blooket-mark" aria-label="Blooket">Blooket</span>
+        <a class="brand" href="./" aria-label="Google Slides home">
+          <span class="slides-mark" aria-label="Google Slides">
+            <span class="slides-icon" aria-hidden="true"></span>
+            Slides
+          </span>
         </a>
         <div class="profile-menu">
           <button class="profile-button" type="button" aria-haspopup="true" aria-expanded="false">
@@ -23,6 +26,10 @@
             <span class="profile-chevron" aria-hidden="true">⌄</span>
           </button>
           <div class="game-menu" role="menu" aria-label="Games">
+            <button type="button" role="menuitem" data-game="google-slides">
+              <span>Google Slides</span>
+              <span aria-hidden="true">›</span>
+            </button>
             <button type="button" role="menuitem" data-game="snow-rider">
               <span>Snow Rider</span>
               <span aria-hidden="true">›</span>
@@ -46,12 +53,12 @@
       <section class="game-section" aria-labelledby="game-title">
         <div class="game-heading">
           <div>
-            <p class="eyebrow">Game library</p>
-            <h1 id="game-title">Snow Rider</h1>
+            <p class="eyebrow">Games & apps</p>
+            <h1 id="game-title">Google Slides</h1>
           </div>
           <div class="game-actions">
-            <a class="open-link" id="openGame" href="https://snow-rider.net/" target="_blank" rel="noopener noreferrer">
-              Open game
+            <a class="open-link" id="openGame" href="https://docs.google.com/presentation/create" target="_blank" rel="noopener noreferrer">
+              Open app
               <span aria-hidden="true">↗</span>
             </a>
             <button class="fullscreen-button" id="fullscreenButton" type="button" aria-label="Enter fullscreen">
@@ -66,16 +73,16 @@
         <div class="game-frame" id="gameFrame">
           <iframe
             id="gameIframe"
-            src="https://snow-rider.net/"
-            title="Play Snow Rider"
+            src="https://docs.google.com/presentation/create"
+            title="Google Slides"
             allow="fullscreen; autoplay; gamepad"
             allowfullscreen
           ></iframe>
           <div class="game-fallback" id="gameFallback" hidden>
-            <div class="fallback-icon" aria-hidden="true">❄</div>
-            <h2>Ready to ride?</h2>
-            <p>This game host may not allow embedding. Open it in a new tab for the best experience.</p>
-            <a id="fallbackGameLink" href="https://snow-rider.net/" target="_blank" rel="noopener noreferrer">Play Snow Rider</a>
+            <div class="fallback-icon" aria-hidden="true">▣</div>
+            <h2>Google Slides</h2>
+            <p>This app may not allow embedding. Open it in a new tab for the best experience.</p>
+            <a id="fallbackGameLink" href="https://docs.google.com/presentation/create" target="_blank" rel="noopener noreferrer">Open Google Slides</a>
           </div>
         </div>
       </section>

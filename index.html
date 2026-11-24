@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#8fd9ff" />
+    <title>Learning Games</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Learning Games home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48">
+              <path d="M24 5v38M7.5 13.5l33 21M40.5 13.5l-33 21M24 12l-5 5h10l-5-5Zm0 24l-5-5h10l-5 5ZM12 17l-6-2 5-4 1 6Zm24 14 6 2-5 4-1-6Z" />
+            </svg>
+          </span>
+          <span>Learning Games</span>
+        </a>
+        <div class="profile-menu">
+          <button class="profile-button" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="profile-avatar" aria-hidden="true">J</span>
+            <span>John</span>
+            <span class="profile-chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="game-menu" role="menu" aria-label="Games">
+            <button type="button" role="menuitem" data-game="snow-rider">
+              <span>Snow Rider</span>
+              <span aria-hidden="true">›</span>
+            </button>
+            <button type="button" role="menuitem" data-game="minecraft">
+              <span>Minecraft 1.8</span>
+              <span aria-hidden="true">›</span>
+            </button>
+            <button type="button" role="menuitem" data-game="drive-mad">
+              <span>Drive Mad</span>
+              <span aria-hidden="true">›</span>
+            </button>
+            <button type="button" role="menuitem" data-game="pac-man">
+              <span>Pac-Man</span>
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="game-section" aria-labelledby="game-title">
+        <div class="game-heading">
+          <div>
+            <p class="eyebrow">Game library</p>
+            <h1 id="game-title">Snow Rider</h1>
+          </div>
+          <div class="game-actions">
+            <a class="open-link" id="openGame" href="https://snow-rider.net/" target="_blank" rel="noopener noreferrer">
+              Open game
+              <span aria-hidden="true">↗</span>
+            </a>
+            <button class="fullscreen-button" id="fullscreenButton" type="button" aria-label="Enter fullscreen">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" />
+              </svg>
+              <span>Fullscreen</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="game-frame" id="gameFrame">
+          <iframe
+            id="gameIframe"
+            src="https://snow-rider.net/"
+            title="Play Snow Rider"
+            allow="fullscreen; autoplay; gamepad"
+            allowfullscreen
+          ></iframe>
+          <div class="game-fallback" id="gameFallback" hidden>
+            <div class="fallback-icon" aria-hidden="true">❄</div>
+            <h2>Ready to ride?</h2>
+            <p>This game host may not allow embedding. Open it in a new tab for the best experience.</p>
+            <a id="fallbackGameLink" href="https://snow-rider.net/" target="_blank" rel="noopener noreferrer">Play Snow Rider</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>

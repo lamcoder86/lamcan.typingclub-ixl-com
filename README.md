@@ -1,2 +1,3 @@
 # lamcan.typingclub-ixl-com
-educational tools
+
+A lightweight Snow Rider game website.

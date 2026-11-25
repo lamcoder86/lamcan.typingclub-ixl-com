@@ -1,3 +1,3 @@
-# lamcan.typingclub-ixl-com
+# Blooket redirect
 
-A lightweight Snow Rider game website.
+This page redirects to the official Blooket play page: https://play.blooket.com/

@@ -1,3 +1,3 @@
-# Blooket redirect
+# Sports Central
 
-This page redirects to the official Blooket play page: https://play.blooket.com/
+A U.S.-focused guide to official NFL and NBA watch options, schedules, scores, and highlights.

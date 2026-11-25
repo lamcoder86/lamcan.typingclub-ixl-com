@@ -3,10 +3,86 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="refresh" content="0;url=https://play.blooket.com/" />
-    <title>Continue to Blooket</title>
+    <meta name="theme-color" content="#111827" />
+    <meta name="description" content="Find official NFL and NBA watch options, schedules, scores, and highlights." />
+    <title>Sports Central | NFL & NBA</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <p>Redirecting to the official Blooket play page. If you are not redirected, <a href="https://play.blooket.com/">continue to Blooket</a>.</p>
+    <main class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="Sports Central home">
+          <span class="brand-icon" aria-hidden="true">SC</span>
+          <span>Sports Central</span>
+        </a>
+        <span class="location-pill"><span aria-hidden="true">●</span> United States</span>
+      </header>
+
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">Your courtside and sideline guide</p>
+        <h1 id="page-title">Game day starts here.</h1>
+        <p class="hero-copy">Official ways to watch, upcoming schedules, live scores, and highlights for the NFL and NBA.</p>
+        <a class="hero-link" href="https://www.nfl.com/ways-to-watch/" target="_blank" rel="noopener noreferrer">
+          Find where to watch
+          <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <section class="league-grid" aria-label="Sports">
+        <article class="league-card nfl-card">
+          <div class="league-heading">
+            <span class="league-mark nfl-mark" aria-hidden="true">NFL</span>
+            <div>
+              <p class="eyebrow">Football</p>
+              <h2>NFL</h2>
+            </div>
+          </div>
+          <p class="card-copy">Check this week’s matchups, find official broadcast options, or catch up on the latest plays.</p>
+          <div class="link-list">
+            <a href="https://www.nfl.com/ways-to-watch/" target="_blank" rel="noopener noreferrer">
+              <span><strong>Ways to watch</strong><small>See U.S. broadcast and streaming options</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.nfl.com/schedules/" target="_blank" rel="noopener noreferrer">
+              <span><strong>Schedule</strong><small>Upcoming games and kickoff times</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.nfl.com/videos/" target="_blank" rel="noopener noreferrer">
+              <span><strong>Videos & highlights</strong><small>Official NFL clips and recaps</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.nfl.com/plus/" target="_blank" rel="noopener noreferrer">
+              <span><strong>NFL+</strong><small>Official streaming subscription details</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="league-card nba-card">
+          <div class="league-heading">
+            <span class="league-mark nba-mark" aria-hidden="true">NBA</span>
+            <div>
+              <p class="eyebrow">Basketball</p>
+              <h2>NBA</h2>
+            </div>
+          </div>
+          <p class="card-copy">Find games, check scores, explore League Pass, and watch official NBA highlights.</p>
+          <div class="link-list">
+            <a href="https://www.nba.com/watch/league-pass" target="_blank" rel="noopener noreferrer">
+              <span><strong>NBA League Pass</strong><small>Official live and on-demand options</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.nba.com/schedule" target="_blank" rel="noopener noreferrer">
+              <span><strong>Schedule</strong><small>Upcoming games and tipoff times</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.nba.com/scores" target="_blank" rel="noopener noreferrer">
+              <span><strong>Live scores</strong><small>Scores, standings, and box scores</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://www.nba.com/watch/video" target="_blank" rel="noopener noreferrer">
+              <span><strong>Videos & highlights</strong><small>Official NBA clips and recaps</small></span><span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <footer class="site-footer">
+        <p>Watch links open official services. Live-game availability may depend on your location, subscription, and broadcast rights.</p>
+      </footer>
+    </main>
   </body>
 </html>

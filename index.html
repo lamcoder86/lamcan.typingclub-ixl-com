@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#17191d" />
-    <meta name="description" content="Sign in to manage your game collection." />
-    <title>PlayDeck | Sign in</title>
+    <meta name="description" content="Browse PlayDeck's original browser game collection." />
+    <title>PlayDeck | Game collection</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="login-layout">
+    <main class="app-layout">
       <section class="collection-panel" aria-label="Featured collection">
         <header class="brand">
           <span class="brand-mark" aria-hidden="true">
@@ -29,31 +29,31 @@
               <span class="orbit"></span>
               <span class="moon"></span>
             </div>
-            <div class="card-info"><strong>Lunar Drift</strong><span>Adventure</span></div>
+            <div class="card-info"><strong>Alpine Courier</strong><span>Delivery</span></div>
           </div>
           <div class="game-card game-card-main">
             <div class="card-art art-neon">
               <span class="sun"></span>
               <span class="grid-lines"></span>
             </div>
-            <div class="card-info"><strong>Neon Racer</strong><span>Racing</span></div>
+            <div class="card-info"><strong>Pocket Pitch</strong><span>Car soccer</span></div>
           </div>
           <div class="game-card game-card-front">
             <div class="card-art art-forest">
               <span class="mountain mountain-one"></span>
               <span class="mountain mountain-two"></span>
             </div>
-            <div class="card-info"><strong>Wildwood</strong><span>Exploration</span></div>
+            <div class="card-info"><strong>Parcel Dash</strong><span>Arcade</span></div>
           </div>
 
           <div class="stats-card">
             <span class="stats-icon" aria-hidden="true">◆</span>
-            <div><strong>128</strong><small>Games owned</small></div>
+            <div><strong>5</strong><small>Games in library</small></div>
           </div>
         </div>
       </section>
 
-      <section class="form-panel" aria-labelledby="login-title">
+      <section class="form-panel" aria-label="PlayDeck game collection">
         <div class="form-wrap">
           <a class="mobile-brand" href="./" aria-label="PlayDeck home">
             <span class="brand-mark" aria-hidden="true">
@@ -62,79 +62,12 @@
             <span>PlayDeck</span>
           </a>
 
-          <div class="form-heading">
-            <p class="eyebrow">Welcome back</p>
-            <h2 id="login-title">Sign in to PlayDeck</h2>
-            <p>Continue building your collection.</p>
+          <div class="form-heading" id="welcome-panel">
+            <p class="eyebrow">Welcome to PlayDeck</p>
+            <h2>Find your next game</h2>
+            <p>This independent collection does not ask for account credentials.</p>
+            <button class="submit-button" id="continue-button" type="button">Browse games</button>
           </div>
-
-          <form id="login-form">
-            <div class="field">
-              <label for="email">Email address</label>
-              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
-            </div>
-
-            <div class="field">
-              <div class="label-row">
-                <label for="password">Password</label>
-                <a href="#" class="forgot-link">Forgot password?</a>
-              </div>
-              <div class="password-wrap">
-                <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
-                <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5Z" />
-                    <circle cx="12" cy="12" r="2.5" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <label class="remember">
-              <input type="checkbox" name="remember" />
-              <span class="checkmark" aria-hidden="true"></span>
-              <span>Keep me signed in</span>
-            </label>
-
-            <button class="submit-button" type="submit">Sign in</button>
-            <p class="form-message" id="form-message" role="status"></p>
-          </form>
-
-          <div class="signed-in-state" id="signed-in-state" hidden>
-            <div class="success-mark" aria-hidden="true">✓</div>
-            <p class="eyebrow">You’re signed in</p>
-            <h3>Welcome to your collection</h3>
-            <p id="welcome-message"></p>
-            <div class="collection-summary">
-              <div><strong>8</strong><span>Games</span></div>
-              <div><strong>0</strong><span>Completed</span></div>
-              <div><strong>7</strong><span>Playable here</span></div>
-            </div>
-            <button class="submit-button" id="continue-button" type="button">Open collection</button>
-            <button class="sign-out-button" id="sign-out-button" type="button">Sign out</button>
-          </div>
-
-          <div class="divider" id="social-divider"><span>or continue with</span></div>
-
-          <div class="social-buttons" id="social-buttons">
-            <button type="button" aria-label="Continue with Google">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.5-.2-2.2H12v4.1h5.4a4.6 4.6 0 0 1-2 3v2.7h3.4c2-1.8 3-4.5 3-7.6Z"/>
-                <path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.4-2.7c-.9.6-2.1 1-3.3 1-2.6 0-4.8-1.8-5.6-4.1H3v2.8A10 10 0 0 0 12 22Z"/>
-                <path fill="#FBBC05" d="M6.4 13.8a6 6 0 0 1 0-3.6V7.4H3A10 10 0 0 0 3 16.6l3.4-2.8Z"/>
-                <path fill="#EA4335" d="M12 6.1c1.5 0 2.8.5 3.9 1.5l2.9-2.9A10 10 0 0 0 3 7.4l3.4 2.8C7.2 7.9 9.4 6.1 12 6.1Z"/>
-              </svg>
-              Google
-            </button>
-            <button type="button" aria-label="Continue with Apple">
-              <svg viewBox="0 0 24 24" aria-hidden="true" class="apple-icon">
-                <path d="M17.05 12.54c.02-2.18 1.78-3.22 1.86-3.27a4 4 0 0 0-3.15-1.7c-1.32-.14-2.6.79-3.28.79-.69 0-1.73-.77-2.85-.75a4.2 4.2 0 0 0-3.53 2.16c-1.52 2.63-.39 6.5 1.08 8.63.72 1.04 1.57 2.2 2.69 2.16 1.09-.04 1.5-.7 2.82-.7 1.31 0 1.69.7 2.84.67 1.18-.02 1.92-1.05 2.62-2.1a8.7 8.7 0 0 0 1.19-2.43 3.8 3.8 0 0 1-2.29-3.46Zm-2.2-6.4a3.8 3.8 0 0 0 .87-2.75 3.9 3.9 0 0 0-2.53 1.3 3.6 3.6 0 0 0-.9 2.64c.95.07 1.92-.4 2.56-1.19Z"/>
-              </svg>
-              Apple
-            </button>
-          </div>
-
-          <p class="create-account" id="create-account">New to PlayDeck? <a href="#">Create an account</a></p>
 
           <section class="collection-view" id="collection-view" aria-labelledby="collection-title" hidden>
             <header class="collection-header">
@@ -142,7 +75,30 @@
                 <p class="eyebrow">Your library</p>
                 <h2 id="collection-title">My games</h2>
               </div>
-              <button class="avatar-button" id="avatar-button" type="button" aria-label="Sign out">PD</button>
+              <nav class="dashboard-nav" aria-label="PlayDeck navigation">
+                <details class="nav-dropdown">
+                  <summary>Games</summary>
+                  <div class="nav-dropdown-panel">
+                    <button type="button" data-launch-game="Parcel Dash">Parcel Dash <span>Lane hopper</span></button>
+                    <button type="button" data-launch-game="Pocket Pitch">Pocket Pitch <span>Car soccer</span></button>
+                    <button type="button" data-launch-game="Alpine Courier">Alpine Courier <span>Snow delivery</span></button>
+                    <button type="button" data-launch-game="Impact Lab">Impact Lab <span>Crash simulator</span></button>
+                    <a href="https://snowrider3d.com/" target="_blank" rel="noopener noreferrer">
+                      Snow Rider 3D <span>External site ↗</span>
+                    </a>
+                  </div>
+                </details>
+                <a class="official-link" href="https://www.blooket.com/" target="_blank" rel="noopener noreferrer">
+                  Official Blooket <span aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+                <details class="nav-dropdown account-dropdown">
+                  <summary><span class="avatar-mark" aria-hidden="true">PD</span> Account</summary>
+                  <div class="account-panel">
+                    <strong>Guest profile</strong>
+                    <p>PlayDeck does not collect account credentials.</p>
+                  </div>
+                </details>
+              </nav>
             </header>
 
             <div class="collection-tools">
@@ -161,52 +117,35 @@
             <div class="filter-row" id="filter-row" hidden>
               <button type="button" class="filter-chip active" data-status="all">All</button>
               <button type="button" class="filter-chip" data-status="playing">Playing</button>
-              <button type="button" class="filter-chip" data-status="completed">Completed</button>
-              <button type="button" class="filter-chip" data-status="wishlist">Wishlist</button>
             </div>
 
-            <p class="results-count" id="results-count">8 games</p>
+            <p class="results-count" id="results-count">5 games</p>
             <div class="game-library" id="game-library">
-              <button class="library-game" type="button" data-status="playing" data-name="Drive Mad" data-url=".game-mirror/drive-mad/index.html" data-fallback="https://cdn.jsdelivr.net/gh/md-abu-kayser/drive-mad@main/index.html|https://html5.gamedistribution.com/rvvASMiM/drive-mad/index.html">
-                <span class="cover cover-drive"><span>DM</span></span>
-                <span class="library-game-info"><strong>Drive Mad</strong><span>Driving</span></span>
-                <span class="status-badge playing">Play</span>
-              </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Crossy Road (official)" data-action="official-crossy">
-                <span class="cover cover-crossy"><span>CR</span></span>
-                <span class="library-game-info"><strong>Crossy Road</strong><span>Official · mobile</span></span>
-                <span class="status-badge official">Official</span>
-              </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Parcel Dash" data-url=".game-mirror/parcel-dash/index.html">
+              <button class="library-game" type="button" data-status="playing" data-name="Parcel Dash" data-url="games/parcel-dash/index.html">
                 <span class="cover cover-parcel"><span>PD</span></span>
                 <span class="library-game-info"><strong>Parcel Dash</strong><span>Lane hopper</span></span>
                 <span class="status-badge playing">Play</span>
               </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Minecraft 1.8" data-url=".game-mirror/minecraft-1.8/index.html" data-fallback="https://cdn.jsdelivr.net/gh/neon443/eaglercraftX188@main/index.html|https://eaglercraft.com/play?version=1.8.8">
-                <span class="cover cover-minecraft"><span>MC</span></span>
-                <span class="library-game-info"><strong>Minecraft 1.8</strong><span>Sandbox</span></span>
-                <span class="status-badge playing">Play</span>
-              </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Retro Bowl" data-url=".game-mirror/retro-bowl-play/index.html" data-fallback="https://poki.com/en/g/retro-bowl|https://game316009.konggames.com/gamez/0031/6009/live/index.html">
-                <span class="cover cover-retrobowl"><span>RB</span></span>
-                <span class="library-game-info"><strong>Retro Bowl</strong><span>Sports</span></span>
-                <span class="status-badge playing">Play</span>
-              </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Pocket Pitch" data-url=".game-mirror/pocket-pitch/index.html">
+              <button class="library-game" type="button" data-status="playing" data-name="Pocket Pitch" data-url="games/pocket-pitch/index.html">
                 <span class="cover cover-pitch"><span>PP</span></span>
                 <span class="library-game-info"><strong>Pocket Pitch</strong><span>Car soccer</span></span>
                 <span class="status-badge playing">Play</span>
               </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Alpine Courier" data-url=".game-mirror/alpine-courier/index.html">
+              <button class="library-game" type="button" data-status="playing" data-name="Alpine Courier" data-url="games/alpine-courier/index.html">
                 <span class="cover cover-courier"><span>AC</span></span>
                 <span class="library-game-info"><strong>Alpine Courier</strong><span>Snow delivery</span></span>
                 <span class="status-badge playing">Play</span>
               </button>
-              <button class="library-game" type="button" data-status="playing" data-name="Impact Lab: Crash Test" data-url=".game-mirror/impact-lab/index.html">
+              <button class="library-game" type="button" data-status="playing" data-name="Impact Lab" data-url="games/impact-lab/index.html">
                 <span class="cover cover-crashsim"><span>IL</span></span>
                 <span class="library-game-info"><strong>Impact Lab</strong><span>3D crash simulator</span></span>
                 <span class="status-badge playing">Play</span>
               </button>
+              <a class="library-game" href="https://snowrider3d.com/" target="_blank" rel="noopener noreferrer" data-status="playing" data-name="Snow Rider 3D" aria-label="Open Snow Rider 3D website in a new tab">
+                <span class="cover cover-snowrider"><span>SR</span></span>
+                <span class="library-game-info"><strong>Snow Rider 3D</strong><span>External site</span></span>
+                <span class="status-badge playing">Open ↗</span>
+              </a>
             </div>
             <p class="no-results" id="no-results" hidden>No games found.</p>
           </section>
@@ -221,90 +160,60 @@
           <h2 id="game-modal-title">Game</h2>
         </div>
         <div class="game-modal-actions">
-          <button class="game-server-button" id="game-server-button" type="button">Switch server</button>
           <button class="game-modal-close" id="game-modal-close" type="button" aria-label="Close game">Close</button>
         </div>
       </div>
-      <div class="official-game-notice" id="official-game-notice" hidden>
-        <div class="official-game-icon" aria-hidden="true">CR</div>
-        <p class="eyebrow">Official game</p>
-        <h3>Crossy Road is a mobile game</h3>
-        <p>The official version is available from the app stores. There isn’t an official browser version to play in this collection.</p>
-        <div class="official-game-links">
-          <a href="https://play.google.com/store/apps/details?id=com.yodo1.crossyroad" target="_blank" rel="noopener noreferrer">Get it on Google Play <span aria-hidden="true">↗</span></a>
-          <a href="https://apps.apple.com/us/app/crossy-road/id1559490508" target="_blank" rel="noopener noreferrer">Get it on the App Store <span aria-hidden="true">↗</span></a>
-          <a class="official-site-link" href="https://www.crossyroad.com/" target="_blank" rel="noopener noreferrer">Visit the official Crossy Road site</a>
-        </div>
-      </div>
       <iframe id="game-frame" title="Game" allow="fullscreen; pointer-lock; autoplay; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe>
-      <p class="game-tip" id="game-tip" hidden>For smoother Minecraft, open Options → Video Settings, choose Fast graphics, and lower Render Distance.</p>
       <p class="game-loading" id="game-loading">Loading game…</p>
     </div>
 
     <script>
-      const passwordInput = document.querySelector("#password");
-      const passwordToggle = document.querySelector(".password-toggle");
-      const loginForm = document.querySelector("#login-form");
-      const formMessage = document.querySelector("#form-message");
-      const signedInState = document.querySelector("#signed-in-state");
-      const welcomeMessage = document.querySelector("#welcome-message");
-      const socialDivider = document.querySelector("#social-divider");
-      const socialButtons = document.querySelector("#social-buttons");
-      const createAccount = document.querySelector("#create-account");
-      const formHeading = document.querySelector(".form-heading");
+      const welcomePanel = document.querySelector("#welcome-panel");
       const continueButton = document.querySelector("#continue-button");
-      const signOutButton = document.querySelector("#sign-out-button");
       const collectionView = document.querySelector("#collection-view");
       const gameSearch = document.querySelector("#game-search");
       const filterButton = document.querySelector("#filter-button");
       const filterRow = document.querySelector("#filter-row");
       const resultsCount = document.querySelector("#results-count");
       const noResults = document.querySelector("#no-results");
-      const avatarButton = document.querySelector("#avatar-button");
       const gameModal = document.querySelector("#game-modal");
       const gameModalTitle = document.querySelector("#game-modal-title");
       const gameModalClose = document.querySelector("#game-modal-close");
       const gameFrame = document.querySelector("#game-frame");
       const gameLoading = document.querySelector("#game-loading");
-      const gameServerButton = document.querySelector("#game-server-button");
-      const officialGameNotice = document.querySelector("#official-game-notice");
-      const gameTip = document.querySelector("#game-tip");
       let activeStatus = "all";
-      let activeSources = [];
-      let activeSourceIndex = 0;
-      let activeGameName = "";
-
-      const showSignedInState = (email) => {
-        loginForm.hidden = true;
-        socialDivider.hidden = true;
-        socialButtons.hidden = true;
-        createAccount.hidden = true;
-        formHeading.hidden = true;
-        signedInState.hidden = false;
-        welcomeMessage.textContent = email ? `Signed in as ${email}` : "Your game shelf is ready.";
-      };
-
-      passwordToggle.addEventListener("click", () => {
-        const showPassword = passwordInput.type === "password";
-        passwordInput.type = showPassword ? "text" : "password";
-        passwordToggle.setAttribute("aria-pressed", String(showPassword));
-        passwordToggle.setAttribute("aria-label", showPassword ? "Hide password" : "Show password");
-      });
-
-      loginForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        if (!loginForm.reportValidity()) return;
-        showSignedInState(document.querySelector("#email").value);
-      });
-
-      document.querySelectorAll(".social-buttons button").forEach((button) => {
-        button.addEventListener("click", () => showSignedInState());
-      });
+      let returnFocusTarget = null;
 
       continueButton.addEventListener("click", () => {
-        signedInState.hidden = true;
+        welcomePanel.hidden = true;
         collectionView.hidden = false;
         window.location.hash = "collection";
+      });
+
+      document.querySelectorAll(".nav-dropdown").forEach((menu) => {
+        const summary = menu.querySelector("summary");
+        menu.addEventListener("pointerenter", (event) => {
+          if (event.pointerType === "mouse") menu.open = true;
+        });
+        menu.addEventListener("pointerleave", () => {
+          if (!menu.contains(document.activeElement)) menu.open = false;
+        });
+        summary.addEventListener("click", (event) => {
+          if (event.detail === 0 && menu.open) event.preventDefault();
+        });
+        menu.addEventListener("focusin", () => { menu.open = true; });
+        menu.addEventListener("focusout", () => {
+          window.requestAnimationFrame(() => {
+            if (!menu.matches(":hover") && !menu.contains(document.activeElement)) menu.open = false;
+          });
+        });
+        menu.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && menu.open) {
+            event.preventDefault();
+            summary.focus();
+            menu.open = false;
+          }
+        });
       });
 
       const updateGameFilters = () => {
@@ -344,55 +253,37 @@
         gameFrame.src = "about:blank";
         document.body.classList.remove("game-open");
         window.history.replaceState(null, "", window.location.pathname);
+        returnFocusTarget?.focus();
+      };
+
+      const openGame = (game, returnFocus = game) => {
+        const gameName = game.dataset.name;
+        returnFocusTarget = returnFocus;
+        gameModalTitle.textContent = gameName;
+        gameModal.hidden = false;
+        document.body.classList.add("game-open");
+        gameFrame.hidden = false;
+        gameLoading.hidden = false;
+        gameLoading.textContent = "Loading game…";
+        gameFrame.src = game.dataset.url;
+        window.history.replaceState(null, "", `#play/${encodeURIComponent(gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`);
         gameModalClose.focus();
       };
 
       document.querySelectorAll(".library-game").forEach((game) => {
-        game.addEventListener("click", () => {
-          activeGameName = game.dataset.name;
-          const isOfficialCrossy = game.dataset.action === "official-crossy";
-          gameModalTitle.textContent = activeGameName;
-          gameModal.hidden = false;
-          document.body.classList.add("game-open");
-          gameModal.classList.toggle("official-mode", isOfficialCrossy);
-
-          if (isOfficialCrossy) {
-            activeSources = [];
-            gameFrame.src = "about:blank";
-            gameFrame.hidden = true;
-            gameServerButton.hidden = true;
-            gameTip.hidden = true;
-            gameLoading.hidden = true;
-            officialGameNotice.hidden = false;
-            gameModalClose.focus();
-            return;
-          }
-
-          officialGameNotice.hidden = true;
-          gameFrame.hidden = false;
-          gameTip.hidden = activeGameName !== "Minecraft 1.8";
-          activeSources = [game.dataset.url, ...(game.dataset.fallback || "").split("|").filter(Boolean)];
-          activeSourceIndex = 0;
-          gameServerButton.hidden = activeSources.length < 2;
-          gameLoading.hidden = false;
-          gameLoading.textContent = "Loading game…";
-          gameFrame.src = activeSources[activeSourceIndex];
-          const routeToken = btoa(unescape(encodeURIComponent(`${activeGameName}|${activeSources[activeSourceIndex]}|play-in-console|full-screen-ready|cdn-launcher`)))
-            .replace(/=/g, "")
-            .replace(/\+/g, "-")
-            .replace(/\//g, "_");
-          const padding = "gamesafe-access-console-embedded-player-session-verification-play-in-browser-without-navigation-" + routeToken;
-          window.history.replaceState(null, "", `#play/${encodeURIComponent(activeGameName.toLowerCase().replace(/[^a-z0-9]+/g,"-"))}/${padding}`);
-          gameModalClose.focus();
-        });
+        game.addEventListener("click", () => openGame(game));
       });
 
-      gameServerButton.addEventListener("click", () => {
-        if (activeSources.length < 2) return;
-        activeSourceIndex = (activeSourceIndex + 1) % activeSources.length;
-        gameLoading.hidden = false;
-        gameFrame.src = activeSources[activeSourceIndex];
-        gameLoading.textContent = `Trying server ${activeSourceIndex + 1} of ${activeSources.length}…`;
+      document.querySelectorAll("[data-launch-game]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const game = Array.from(document.querySelectorAll(".library-game"))
+            .find((item) => item.dataset.name === button.dataset.launchGame);
+          if (!game) {
+            console.error(`PlayDeck menu refers to unavailable game "${button.dataset.launchGame}".`);
+            return;
+          }
+          openGame(game, button);
+        });
       });
 
       gameFrame.addEventListener("load", () => {
@@ -404,28 +295,6 @@
         if (event.key === "Escape" && !gameModal.hidden) closeGame();
       });
 
-      signOutButton.addEventListener("click", () => {
-        loginForm.reset();
-        loginForm.hidden = false;
-        socialDivider.hidden = false;
-        socialButtons.hidden = false;
-        createAccount.hidden = false;
-        formHeading.hidden = false;
-        signedInState.hidden = true;
-        window.location.hash = "";
-        collectionView.hidden = true;
-      });
-
-      avatarButton.addEventListener("click", () => {
-        loginForm.reset();
-        collectionView.hidden = true;
-        loginForm.hidden = false;
-        socialDivider.hidden = false;
-        socialButtons.hidden = false;
-        createAccount.hidden = false;
-        formHeading.hidden = false;
-        window.location.hash = "";
-      });
     </script>
   </body>
 </html>

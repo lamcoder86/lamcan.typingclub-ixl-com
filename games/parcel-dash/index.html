@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#252a3b" />
+    <title>Parcel Dash</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #202436; color: #f5f2e9; font-family: system-ui, sans-serif; }
+      main { display: grid; width: 100%; height: 100%; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; padding: 12px; }
+      header, footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      h1 { margin: 0; font-size: clamp(17px, 3vw, 23px); letter-spacing: -.04em; }
+      header p { margin: 2px 0 0; color: #b6bdd2; font-size: 11px; }
+      #score { padding: 7px 12px; border: 1px solid #ffffff24; border-radius: 8px; background: #ffffff0c; font-size: 12px; font-weight: 800; white-space: nowrap; }
+      .stage { position: relative; min-height: 0; overflow: hidden; border: 1px solid #ffffff20; border-radius: 12px; background: #303b4e; }
+      canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+      footer { min-height: 34px; color: #b6bdd2; font-size: 10px; }
+      button { color: inherit; font: inherit; }
+      #restart { padding: 7px 11px; border: 1px solid #ffffff35; border-radius: 7px; background: #ffffff10; cursor: pointer; }
+      #restart:hover { background: #ffffff20; }
+      .pad { display: none; gap: 7px; justify-content: center; }
+      .pad button { width: 42px; height: 38px; border: 1px solid #ffffff35; border-radius: 8px; background: #ffffff14; font-size: 16px; touch-action: none; user-select: none; }
+      @media (pointer: coarse) { .pad { display: flex; } footer .keys { display: none; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Parcel Dash</h1>
+          <p>Courier run · dodge traffic · ride the river</p>
+        </div>
+        <div id="score" aria-live="polite">BLOCKS&nbsp; 0</div>
+      </header>
+      <div class="stage">
+        <canvas id="game" aria-label="Parcel Dash game"></canvas>
+      </div>
+      <footer>
+        <span class="keys">Move: arrows or WASD · Restart: R</span>
+        <div class="pad" aria-label="Touch controls">
+          <button type="button" data-move="left" aria-label="Move left">◀</button>
+          <button type="button" data-move="down" aria-label="Move back">▼</button>
+          <button type="button" data-move="up" aria-label="Move forward">▲</button>
+          <button type="button" data-move="right" aria-label="Move right">▶</button>
+        </div>
+        <button id="restart" type="button">New run</button>
+      </footer>
+    </main>
+    <script>
+      const canvas = document.querySelector("#game");
+      const ctx = canvas.getContext("2d");
+      const scoreLabel = document.querySelector("#score");
+      const TILE_W = 80;
+      const TILE_H = 58;
+      const COLS = 9;
+      const player = { col: 4, row: 0 };
+      const lanes = new Map();
+      let width = 800;
+      let height = 600;
+      let scale = 1;
+      let highestRow = 0;
+      let dead = false;
+      let lastTime = 0;
+      let elapsed = 0;
+
+      function randomFor(seed) {
+        const value = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+        return value - Math.floor(value);
+      }
+
+      function makeLane(row) {
+        if (row <= 0 || row % 5 === 0 || randomFor(row) < 0.27) {
+          return { type: "park", objects: [] };
+        }
+        const river = randomFor(row + 10) < 0.3;
+        const dir = randomFor(row + 20) < 0.5 ? 1 : -1;
+        const count = river ? 3 : 3 + Math.floor(randomFor(row + 30) * 2);
+        const objects = Array.from({ length: count }, (_, index) => ({
+          x: (index * (COLS * TILE_W / count)) + randomFor(row * 7 + index) * 45,
+          width: river ? 102 + randomFor(row + index + 40) * 38 : 45 + randomFor(row + index + 50) * 33,
+          color: river ? ["#b98259", "#c99160", "#8d674e"][Math.floor(randomFor(row + index + 60) * 3)] :
+            ["#e16e5b", "#e8c15e", "#7498c7", "#d9e0db"][Math.floor(randomFor(row + index + 70) * 4)]
+        }));
+        return { type: river ? "river" : "road", dir, speed: (river ? 46 : 72) + randomFor(row + 80) * 43, objects };
+      }
+
+      function laneAt(row) {
+        if (!lanes.has(row)) lanes.set(row, makeLane(row));
+        return lanes.get(row);
+      }
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        canvas.width = Math.max(1, Math.round(rect.width * dpr));
+        canvas.height = Math.max(1, Math.round(rect.height * dpr));
+        width = 800;
+        height = 600;
+        scale = Math.min(canvas.width / width, canvas.height / height);
+        ctx.setTransform(scale, 0, 0, scale, (canvas.width - width * scale) / 2, (canvas.height - height * scale) / 2);
+      }
+
+      function move(direction) {
+        if (dead) {
+          startNewRun();
+          return;
+        }
+        if (direction === "up") player.row += 1;
+        if (direction === "down") player.row = Math.max(0, player.row - 1);
+        if (direction === "left") player.col = Math.max(0, player.col - 1);
+        if (direction === "right") player.col = Math.min(COLS - 1, player.col + 1);
+        highestRow = Math.max(highestRow, player.row);
+        scoreLabel.innerHTML = `BLOCKS&nbsp; ${highestRow}`;
+        for (let row = highestRow - 2; row <= highestRow + 12; row += 1) laneAt(row);
+      }
+
+      function startNewRun() {
+        player.col = 4;
+        player.row = 0;
+        highestRow = 0;
+        dead = false;
+        elapsed = 0;
+        lanes.clear();
+        scoreLabel.innerHTML = "BLOCKS&nbsp; 0";
+      }
+
+      function drawPark(y, row) {
+        ctx.fillStyle = row % 2 ? "#526d55" : "#59765d";
+        ctx.fillRect(0, y, width, TILE_H);
+        for (let col = 0; col < COLS; col += 1) {
+          const sparkle = randomFor(row * 19 + col * 3);
+          if (sparkle > 0.68) {
+            ctx.fillStyle = sparkle > 0.83 ? "#d0b570" : "#8eaa7a";
+            ctx.beginPath();
+            ctx.arc(col * TILE_W + 15 + sparkle * 40, y + 13 + sparkle * 28, 2 + sparkle * 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        ctx.fillStyle = "#344d3d";
+        ctx.fillRect(0, y + TILE_H - 3, width, 3);
+      }
+
+      function drawRoad(y, lane, row) {
+        ctx.fillStyle = "#444958";
+        ctx.fillRect(0, y, width, TILE_H);
+        ctx.fillStyle = "#343946";
+        ctx.fillRect(0, y + TILE_H - 3, width, 3);
+        ctx.fillStyle = "#d9bd75";
+        for (let x = 14; x < width; x += 68) {
+          ctx.fillRect(x, y + TILE_H / 2 - 1, 31, 2);
+        }
+        for (const object of lane.objects) {
+          const carX = ((object.x + lane.dir * lane.speed * elapsed) % (width + 120) + (width + 120)) % (width + 120) - 60;
+          ctx.fillStyle = "#252935";
+          ctx.beginPath();
+          ctx.roundRect(carX + 2, y + 11, object.width, 36, 8);
+          ctx.fill();
+          ctx.fillStyle = object.color;
+          ctx.beginPath();
+          ctx.roundRect(carX, y + 8, object.width, 34, 8);
+          ctx.fill();
+          ctx.fillStyle = "#c2d7d4";
+          ctx.beginPath();
+          ctx.roundRect(carX + object.width * 0.28, y + 12, object.width * 0.42, 12, 4);
+          ctx.fill();
+          ctx.fillStyle = "#ffdc8a";
+          ctx.fillRect(lane.dir > 0 ? carX + object.width - 6 : carX + 2, y + 29, 4, 5);
+        }
+      }
+
+      function drawRiver(y, lane, row) {
+        ctx.fillStyle = "#397c88";
+        ctx.fillRect(0, y, width, TILE_H);
+        ctx.strokeStyle = "#77aeb1";
+        ctx.lineWidth = 1;
+        for (let x = 0; x < width; x += 47) {
+          const waveY = y + 12 + Math.sin(elapsed * 1.2 + x * 0.08 + row) * 4;
+          ctx.beginPath();
+          ctx.moveTo(x, waveY);
+          ctx.quadraticCurveTo(x + 12, waveY - 4, x + 24, waveY);
+          ctx.stroke();
+        }
+        for (const object of lane.objects) {
+          const logX = ((object.x + lane.dir * lane.speed * elapsed) % (width + 170) + (width + 170)) % (width + 170) - 80;
+          ctx.fillStyle = "#694f41";
+          ctx.beginPath();
+          ctx.roundRect(logX, y + 14, object.width, 31, 13);
+          ctx.fill();
+          ctx.fillStyle = object.color;
+          ctx.beginPath();
+          ctx.roundRect(logX, y + 10, object.width, 27, 12);
+          ctx.fill();
+          ctx.strokeStyle = "#e0b787";
+          ctx.beginPath();
+          ctx.moveTo(logX + 18, y + 12);
+          ctx.lineTo(logX + 18, y + 34);
+          ctx.moveTo(logX + object.width - 20, y + 12);
+          ctx.lineTo(logX + object.width - 20, y + 34);
+          ctx.stroke();
+          ctx.strokeStyle = "#77aeb1";
+        }
+      }
+
+      function objectAt(lane, worldX, type) {
+        return lane.objects.some((object) => {
+          const x = ((object.x + lane.dir * lane.speed * elapsed) % (width + 170) + (width + 170)) % (width + 170) - (type === "river" ? 80 : 60);
+          return worldX >= x - TILE_W * 0.32 && worldX <= x + object.width + TILE_W * 0.32;
+        });
+      }
+
+      function drawCourier(x, y) {
+        ctx.save();
+        ctx.translate(x, y + Math.sin(elapsed * 9) * 2);
+        ctx.fillStyle = "#20253666";
+        ctx.beginPath();
+        ctx.ellipse(0, 22, 21, 7, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#e99b58";
+        ctx.beginPath();
+        ctx.roundRect(-17, -15, 34, 35, 10);
+        ctx.fill();
+        ctx.fillStyle = "#313a55";
+        ctx.beginPath();
+        ctx.roundRect(-14, -19, 28, 25, 9);
+        ctx.fill();
+        ctx.fillStyle = "#c9eff0";
+        ctx.beginPath();
+        ctx.roundRect(-9, -13, 18, 11, 5);
+        ctx.fill();
+        ctx.fillStyle = "#38465a";
+        ctx.beginPath();
+        ctx.arc(-4, -8, 1.5, 0, Math.PI * 2);
+        ctx.arc(4, -8, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#e2b16b";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(0, -19);
+        ctx.lineTo(0, -25);
+        ctx.stroke();
+        ctx.fillStyle = "#e27b8d";
+        ctx.beginPath();
+        ctx.arc(0, -27, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#7994c0";
+        ctx.beginPath();
+        ctx.roundRect(7, 4, 16, 14, 3);
+        ctx.fill();
+        ctx.strokeStyle = "#e4c283";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(12, 8, 6, 6);
+        ctx.restore();
+      }
+
+      function drawOverlay(title, detail, action) {
+        ctx.fillStyle = "#171b28b8";
+        ctx.fillRect(0, 0, width, height);
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#f5f2e9";
+        ctx.font = "700 36px system-ui, sans-serif";
+        ctx.fillText(title, width / 2, height / 2 - 22);
+        ctx.fillStyle = "#c5ccdc";
+        ctx.font = "15px system-ui, sans-serif";
+        ctx.fillText(detail, width / 2, height / 2 + 12);
+        ctx.fillStyle = "#e99b58";
+        ctx.font = "700 13px system-ui, sans-serif";
+        ctx.fillText(action, width / 2, height / 2 + 48);
+      }
+
+      function update(dt) {
+        elapsed += dt;
+        const playerX = player.col * TILE_W + TILE_W / 2;
+        const currentLane = laneAt(player.row);
+        if (currentLane.type === "road" && objectAt(currentLane, playerX, "road")) {
+          dead = true;
+        }
+        if (currentLane.type === "river" && !objectAt(currentLane, playerX, "river")) {
+          dead = true;
+        }
+        if (dead) return;
+
+        const topRow = Math.max(0, highestRow - 8);
+        for (const [row, lane] of lanes) {
+          if (row < topRow) continue;
+          if (lane.type === "river" && row === player.row) {
+            player.col += lane.dir * lane.speed * dt / TILE_W;
+            if (player.col < 0 || player.col >= COLS) dead = true;
+          }
+        }
+      }
+
+      function draw() {
+        ctx.fillStyle = "#313d50";
+        ctx.fillRect(0, 0, width, height);
+        const playerY = height * 0.72;
+        const firstRow = Math.max(0, player.row - 9);
+        const lastRow = player.row + 3;
+        for (let row = firstRow; row <= lastRow; row += 1) {
+          const y = playerY + (player.row - row) * TILE_H;
+          const lane = laneAt(row);
+          if (lane.type === "park") drawPark(y, row);
+          else if (lane.type === "road") drawRoad(y, lane, row);
+          else drawRiver(y, lane, row);
+        }
+
+        const playerX = Math.max(18, Math.min(width - 18, player.col * TILE_W + TILE_W / 2));
+        const playerScreenY = playerY + TILE_H / 2;
+        drawCourier(playerX, playerScreenY);
+
+        if (player.row > 1) {
+          ctx.fillStyle = "#f5f2e9bb";
+          ctx.font = "11px system-ui, sans-serif";
+          ctx.textAlign = "left";
+          ctx.fillText(`BEST RUN  ${highestRow}`, 16, 24);
+        }
+        if (dead) {
+          drawOverlay("Run over", `You crossed ${highestRow} blocks`, "Press any direction to try again");
+        } else if (highestRow === 0 && elapsed < 7) {
+          drawOverlay("Parcel Dash", "A tiny courier, a very big commute.", "Press an arrow or WASD to start");
+        }
+      }
+
+      function frame(time) {
+        const dt = Math.min((time - lastTime) / 1000 || 0, 0.04);
+        lastTime = time;
+        update(dt);
+        draw();
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("resize", resize);
+      window.addEventListener("keydown", (event) => {
+        const keys = {
+          ArrowUp: "up", w: "up", W: "up",
+          ArrowDown: "down", s: "down", S: "down",
+          ArrowLeft: "left", a: "left", A: "left",
+          ArrowRight: "right", d: "right", D: "right"
+        };
+        if (keys[event.key]) {
+          event.preventDefault();
+          move(keys[event.key]);
+        } else if (event.key.toLowerCase() === "r") {
+          startNewRun();
+        }
+      });
+      document.querySelectorAll(".pad button").forEach((button) => {
+        button.addEventListener("pointerdown", (event) => {
+          event.preventDefault();
+          move(button.dataset.move);
+        });
+      });
+      document.querySelector("#restart").addEventListener("click", startNewRun);
+      resize();
+      requestAnimationFrame(frame);
+    </script>
+  </body>
+</html>

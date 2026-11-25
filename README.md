@@ -1,9 +1,7 @@
 # PlayDeck
 
-A responsive login screen and game collection featuring Drive Mad, Minecraft 1.8,
-Retro Bowl, Pocket Pitch (an original in-browser car-soccer game), and Parcel Dash
-(an original lane-hopping arcade game), and Alpine Courier (an original downhill
-delivery game), plus Impact Lab, an original 3D crash-test driving simulator.
-
-The official Crossy Road release is mobile-only; the collection links to its official
-app store listings rather than substituting an unofficial browser clone.
+An independent, guest-access game dashboard featuring four original browser games:
+Parcel Dash, Pocket Pitch, Alpine Courier, and Impact Lab. It also links to the
+Snow Rider 3D website, which opens in a new tab. The dashboard does not request
+account credentials. Its Blooket link opens the official Blooket website in a new
+tab; PlayDeck is not affiliated with Blooket.

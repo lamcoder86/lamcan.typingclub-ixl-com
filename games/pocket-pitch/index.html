@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#17251e" />
+    <title>Pocket Pitch</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #17251e; color: #f7f7f1; font-family: system-ui, sans-serif; }
+      main { display: grid; width: 100%; height: 100%; grid-template-rows: auto 1fr auto; gap: 8px; padding: 12px; }
+      header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      h1 { margin: 0; font-size: clamp(16px, 3vw, 22px); letter-spacing: -.04em; }
+      header p { margin: 2px 0 0; color: #b7c8b7; font-size: 11px; }
+      #score { padding: 7px 12px; border: 1px solid #ffffff30; border-radius: 8px; background: #ffffff10; font-size: 13px; font-weight: 800; white-space: nowrap; }
+      .field-wrap { position: relative; min-height: 0; border: 1px solid #ffffff22; border-radius: 12px; overflow: hidden; background: #376d48; }
+      canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+      footer { display: flex; justify-content: space-between; gap: 10px; align-items: center; color: #c1ceb9; font-size: 10px; }
+      button { color: inherit; font: inherit; }
+      #reset { padding: 7px 11px; border: 1px solid #ffffff35; border-radius: 7px; background: #ffffff12; cursor: pointer; }
+      #reset:hover { background: #ffffff22; }
+      .touch-controls { display: none; gap: 8px; justify-content: center; margin-top: 2px; }
+      .touch-controls button { min-width: 46px; height: 40px; border: 1px solid #ffffff35; border-radius: 8px; background: #ffffff16; font-size: 17px; touch-action: none; user-select: none; }
+      @media (pointer: coarse) { .touch-controls { display: flex; } footer .help { display: none; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Pocket Pitch</h1>
+          <p>Drive the ball into the gold goal!</p>
+        </div>
+        <div id="score" aria-live="polite">GOALS&nbsp; 0</div>
+      </header>
+      <div class="field-wrap">
+        <canvas id="pitch" aria-label="Car soccer game field"></canvas>
+      </div>
+      <div class="touch-controls" aria-label="Touch controls">
+        <button type="button" data-key="ArrowLeft" aria-label="Steer left">◀</button>
+        <button type="button" data-key="ArrowDown" aria-label="Reverse">▼</button>
+        <button type="button" data-key="ArrowUp" aria-label="Accelerate">▲</button>
+        <button type="button" data-key="ArrowRight" aria-label="Steer right">▶</button>
+      </div>
+      <footer>
+        <span class="help">Drive: WASD or arrows · Boost: Shift · Reset: R</span>
+        <span class="help">Push the ball through the right-hand goal</span>
+        <button id="reset" type="button">Reset car</button>
+      </footer>
+    </main>
+    <script>
+      const canvas = document.querySelector("#pitch");
+      const ctx = canvas.getContext("2d");
+      const scoreDisplay = document.querySelector("#score");
+      const pressed = new Set();
+      const world = { width: 900, height: 520, goals: 150, inset: 34 };
+      const car = { x: 190, y: 260, angle: 0, speed: 0, radius: 25 };
+      const ball = { x: 430, y: 260, vx: 0, vy: 0, radius: 17 };
+      let goals = 0;
+      let lastTime = 0;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const scale = Math.min(window.devicePixelRatio || 1, 1.5);
+        canvas.width = Math.max(1, Math.round(rect.width * scale));
+        canvas.height = Math.max(1, Math.round(rect.height * scale));
+        ctx.setTransform(canvas.width / world.width, 0, 0, canvas.height / world.height, 0, 0);
+      }
+
+      function resetPositions() {
+        car.x = 190;
+        car.y = world.height / 2;
+        car.angle = 0;
+        car.speed = 0;
+        ball.x = world.width / 2;
+        ball.y = world.height / 2;
+        ball.vx = 0;
+        ball.vy = 0;
+      }
+
+      function drawField() {
+        ctx.fillStyle = "#39764c";
+        ctx.fillRect(0, 0, world.width, world.height);
+        for (let i = 0; i < 10; i += 1) {
+          ctx.fillStyle = i % 2 ? "#ffffff08" : "#10281a0a";
+          ctx.fillRect(i * 90, 0, 90, world.height);
+        }
+        ctx.strokeStyle = "#e7f2ddbb";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(world.inset, world.inset, world.width - world.inset * 2, world.height - world.inset * 2);
+        ctx.beginPath();
+        ctx.moveTo(world.width / 2, world.inset);
+        ctx.lineTo(world.width / 2, world.height - world.inset);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(world.width / 2, world.height / 2, 72, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(world.width / 2, world.height / 2, 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#e7f2dd";
+        ctx.fill();
+
+        const goalTop = world.height / 2 - world.goals / 2;
+        ctx.fillStyle = "#e6bc53";
+        ctx.fillRect(world.width - world.inset + 2, goalTop, 24, world.goals);
+        ctx.fillStyle = "#f4f4e9";
+        ctx.fillRect(world.inset - 26, goalTop, 24, world.goals);
+        ctx.strokeStyle = "#ffffff55";
+        ctx.lineWidth = 2;
+        for (let y = goalTop + 12; y < goalTop + world.goals; y += 14) {
+          ctx.beginPath();
+          ctx.moveTo(world.width - world.inset + 2, y);
+          ctx.lineTo(world.width - world.inset + 26, y);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(world.inset - 26, y);
+          ctx.lineTo(world.inset - 2, y);
+          ctx.stroke();
+        }
+      }
+
+      function drawCar() {
+        ctx.save();
+        ctx.translate(car.x, car.y);
+        ctx.rotate(car.angle);
+        ctx.fillStyle = "#111a16";
+        ctx.fillRect(-18, -21, 12, 7);
+        ctx.fillRect(8, -21, 12, 7);
+        ctx.fillRect(-18, 14, 12, 7);
+        ctx.fillRect(8, 14, 12, 7);
+        ctx.fillStyle = "#e45f49";
+        ctx.beginPath();
+        ctx.roundRect(-26, -16, 52, 32, 9);
+        ctx.fill();
+        ctx.fillStyle = "#b8d5d0";
+        ctx.beginPath();
+        ctx.roundRect(-8, -12, 19, 24, 6);
+        ctx.fill();
+        ctx.fillStyle = "#ffe5a0";
+        ctx.fillRect(20, -11, 5, 6);
+        ctx.fillRect(20, 5, 5, 6);
+        ctx.restore();
+      }
+
+      function drawBall() {
+        ctx.save();
+        ctx.translate(ball.x, ball.y);
+        ctx.fillStyle = "#111a16";
+        ctx.beginPath();
+        ctx.ellipse(4, 6, ball.radius, ball.radius * 0.72, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#f8f6df";
+        ctx.beginPath();
+        ctx.arc(0, 0, ball.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#313a35";
+        ctx.beginPath();
+        ctx.arc(0, 0, 5, 0, Math.PI * 2);
+        ctx.fill();
+        for (const [x, y] of [[-8, -8], [9, -6], [-9, 8], [9, 9]]) {
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function update(dt) {
+        const forward = pressed.has("ArrowUp") || pressed.has("w") || pressed.has("W");
+        const reverse = pressed.has("ArrowDown") || pressed.has("s") || pressed.has("S");
+        const left = pressed.has("ArrowLeft") || pressed.has("a") || pressed.has("A");
+        const right = pressed.has("ArrowRight") || pressed.has("d") || pressed.has("D");
+        const boost = pressed.has("Shift");
+        const steering = (right ? 1 : 0) - (left ? 1 : 0);
+
+        if (forward) car.speed += (boost ? 300 : 210) * dt;
+        if (reverse) car.speed -= 150 * dt;
+        car.speed *= Math.pow(0.985, dt * 60);
+        car.speed = Math.max(-120, Math.min(boost ? 370 : 260, car.speed));
+        car.angle += steering * (0.9 + Math.min(Math.abs(car.speed) / 100, 1.6)) * dt * Math.sign(car.speed || 1);
+        car.x += Math.cos(car.angle) * car.speed * dt;
+        car.y += Math.sin(car.angle) * car.speed * dt;
+
+        const minX = world.inset + car.radius;
+        const maxX = world.width - world.inset - car.radius;
+        const minY = world.inset + car.radius;
+        const maxY = world.height - world.inset - car.radius;
+        if (car.x < minX || car.x > maxX) {
+          car.x = Math.max(minX, Math.min(maxX, car.x));
+          car.speed *= -0.42;
+        }
+        if (car.y < minY || car.y > maxY) {
+          car.y = Math.max(minY, Math.min(maxY, car.y));
+          car.speed *= -0.42;
+        }
+
+        let dx = ball.x - car.x;
+        let dy = ball.y - car.y;
+        let distance = Math.hypot(dx, dy);
+        if (distance < car.radius + ball.radius) {
+          if (distance < 0.01) {
+            dx = Math.cos(car.angle);
+            dy = Math.sin(car.angle);
+            distance = 1;
+          }
+          const nx = dx / distance;
+          const ny = dy / distance;
+          const overlap = car.radius + ball.radius - distance;
+          ball.x += nx * overlap;
+          ball.y += ny * overlap;
+          const hit = Math.max(0, car.speed * (Math.cos(car.angle) * nx + Math.sin(car.angle) * ny));
+          ball.vx += nx * (hit * 1.18 + 75) + car.speed * Math.cos(car.angle) * 0.22;
+          ball.vy += ny * (hit * 1.18 + 75) + car.speed * Math.sin(car.angle) * 0.22;
+        }
+
+        ball.x += ball.vx * dt;
+        ball.y += ball.vy * dt;
+        ball.vx *= Math.pow(0.992, dt * 60);
+        ball.vy *= Math.pow(0.992, dt * 60);
+
+        const goalTop = world.height / 2 - world.goals / 2;
+        const goalBottom = world.height / 2 + world.goals / 2;
+        if (ball.x > world.width - world.inset && ball.y > goalTop && ball.y < goalBottom) {
+          goals += 1;
+          scoreDisplay.innerHTML = `GOALS&nbsp; ${goals}`;
+          resetPositions();
+        } else if (ball.x < world.inset && ball.y > goalTop && ball.y < goalBottom) {
+          resetPositions();
+        } else {
+          if (ball.x - ball.radius < world.inset || ball.x + ball.radius > world.width - world.inset) ball.vx *= -0.76;
+          if (ball.y - ball.radius < world.inset || ball.y + ball.radius > world.height - world.inset) ball.vy *= -0.76;
+          ball.x = Math.max(world.inset + ball.radius, Math.min(world.width - world.inset - ball.radius, ball.x));
+          ball.y = Math.max(world.inset + ball.radius, Math.min(world.height - world.inset - ball.radius, ball.y));
+        }
+      }
+
+      function frame(time) {
+        const dt = Math.min((time - lastTime) / 1000 || 0, 0.04);
+        lastTime = time;
+        update(dt);
+        drawField();
+        drawBall();
+        drawCar();
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("resize", resize);
+      window.addEventListener("keydown", (event) => {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) event.preventDefault();
+        pressed.add(event.key);
+        if (event.key.toLowerCase() === "r") resetPositions();
+      });
+      window.addEventListener("keyup", (event) => pressed.delete(event.key));
+      window.addEventListener("blur", () => pressed.clear());
+      document.querySelectorAll(".touch-controls button").forEach((button) => {
+        const key = button.dataset.key;
+        button.addEventListener("pointerdown", (event) => {
+          event.preventDefault();
+          button.setPointerCapture(event.pointerId);
+          pressed.add(key);
+        });
+        const release = () => pressed.delete(key);
+        button.addEventListener("pointerup", release);
+        button.addEventListener("pointercancel", release);
+        button.addEventListener("lostpointercapture", release);
+      });
+      document.querySelector("#reset").addEventListener("click", resetPositions);
+      resize();
+      requestAnimationFrame(frame);
+    </script>
+  </body>
+</html>

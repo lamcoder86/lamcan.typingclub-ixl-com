@@ -814,7 +814,7 @@ a {
 .cover-crossy { background: linear-gradient(90deg, #77b96b 0 20%, #d5d38a 21% 40%, #5ba2bb 41% 60%, #77b96b 61%); }
 .cover-minecraft { background: linear-gradient(145deg, #83b65b 0 38%, #6f5038 39% 58%, #4d7e91 59%); }
 .cover-retrobowl { background: linear-gradient(145deg, #d5df82 0 30%, #c84f45 31% 58%, #24303a 59%); }
-.cover-snowrider { background: radial-gradient(circle at 72% 24%, #effbff 0 9%, transparent 10%), linear-gradient(155deg, #77d8ee 0 42%, #eaf9ff 43% 58%, #3a7185 59%); }
+.cover-courier { background: radial-gradient(circle at 72% 25%, #f6c95d 0 8%, transparent 9%), linear-gradient(145deg, #d78161 0 32%, #283952 33% 58%, #9ed5ce 59%); }
 
 .library-game-info {
   display: flex;
